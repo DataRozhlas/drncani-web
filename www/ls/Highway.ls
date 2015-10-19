@@ -9,7 +9,8 @@ colors =
 
 laneWidth = 250 / 9
 class ig.Highway
-  (@ctx, @height) ->
+  (@ctx, @height, @kilometers) ->
+    @pxPerKm = @height / @kilometers
 
   addLane: (number) ->
     width = laneWidth
@@ -85,8 +86,6 @@ class ig.Highway
       ..lineTo offset + 3, height
       ..stroke!
 
-
-
   addDelim: (number, type) ->
     width = 2
     height = @height
@@ -99,8 +98,38 @@ class ig.Highway
       @addDelimDash width, height, offset , 20, 10
       @addDelimFull width, height, offset + 3
 
+  addRamp: (number, ramp) ->
+    offsetY = @getPixel ramp.km
+    offsetX = @getOffset number
+    width = laneWidth
+    height = 80
+    if ramp.shape in <[both on]>
+      offsetY -= height / 2
+    if ramp.shape != "both"
+      height /= 2
+    @ctx
+      ..beginPath!
+      ..fillStyle = \#000
+      ..rect offsetX, offsetY, width, height
+      ..fill!
+
+  addGasStation: (number, ramp) ->
+    offsetY = @getPixel ramp.km
+    offsetX = @getOffset number
+    width = laneWidth
+    height = 40
+    offsetY -= height / 2
+    @ctx
+      ..beginPath!
+      ..fillStyle = \#000
+      ..rect offsetX, offsetY, width, height
+      ..fill!
+
   getOffset: (number) ->
     number * laneWidth
+
+  getPixel: (kilometer) ->
+    kilometer * @pxPerKm
 
   addDelimFull: (width, height, offset) ->
     @ctx
@@ -117,4 +146,5 @@ class ig.Highway
       @ctx.rect offset, heightOffset, width, dashFill
     @ctx
       ..fill!
+
 
