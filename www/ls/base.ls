@@ -1,6 +1,8 @@
 container = d3.select ig.containers.base
 height = 980
-kilometers = height / 50
+kilometers = 193.5
+height = kilometers * 50
+
 class Ramp
   (@name, @km, @dir = "both", @shape = "both", @special)->
 
@@ -19,7 +21,7 @@ gasStations =
   new GasStation "Újezd", 4.5 # benzinka
   new GasStation "Újezd", 4.5 # benzinka
 canvas = container.append \canvas
-  ..attr \width 250
+  ..attr \width 300
   ..attr \height height
 
 ctx = canvas.node!getContext \2d
@@ -56,3 +58,17 @@ for gasStation in gasStations
   if gasStation.dir in <[brno both]>
     highway.addGasStation 0, gasStation
   # console.log ramp
+
+data = ig.data.data.split "\n"
+  ..shift!
+outData = for datum in data
+  [km, diffR, diffL, minSpeed] = datum.split "\t"
+  km = parseFloat km
+  diffR = parseInt diffR, 10
+  diffL = parseInt diffL, 10
+  minSpeed  = parseFloat minSpeed
+  {km, diffR, diffL, minSpeed}
+
+highway.addData outData
+
+highway.drawKm [0 to 193.5 by 0.5]

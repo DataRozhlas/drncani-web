@@ -147,4 +147,41 @@ class ig.Highway
     @ctx
       ..fill!
 
+  addData: (data) ->
+    scale = d3.scale.quantile!
+      ..domain data.map (.diffR)
+      ..range ['rgb(165,0,38)','rgb(215,48,39)','rgb(244,109,67)','rgb(253,174,97)','rgb(254,224,139)','rgb(255,255,191)','rgb(217,239,139)','rgb(166,217,106)','rgb(102,189,99)','rgb(26,152,80)','rgb(0,104,55)'].reverse!
 
+    referenceIndex = 0
+    xLeft = 70
+    xRight = 60
+    for datum, index in data
+      topPx = index
+      if datum.km == 193.5
+        referenceIndex = index
+        xRight = 170
+        xLeft = 180
+      if referenceIndex
+        topPx = referenceIndex - (topPx - referenceIndex)
+      topPx += 0.5
+
+      colorL = scale datum.diffL
+      colorR = scale datum.diffR
+      @ctx
+        ..strokeStyle = colorR
+        ..beginPath!
+        ..moveTo xRight, topPx
+        ..lineTo xRight + 10, topPx
+        ..stroke!
+        ..strokeStyle = colorL
+        ..beginPath!
+        ..moveTo xLeft, topPx
+        ..lineTo xLeft + 10, topPx
+        ..stroke!
+
+  drawKm: (kms) ->
+    for km in kms
+      px = @getPixel km
+      @ctx
+        ..strokeStyle = \black
+        ..fillText km, 260, px
