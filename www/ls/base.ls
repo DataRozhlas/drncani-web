@@ -6,8 +6,6 @@ height = kilometers * 50
 class Ramp
   (@name, @km, @dir = "both", @shape = "both", @special)->
 
-class GasStation
-  (@name, @km, @dir = "both", @shape = "both", @special)->
 ramps =
   # new Ramp "Chodov", 0.5, "brno", "on"
   new Ramp "Chodov", 1.5
@@ -39,10 +37,6 @@ ramps =
   new Ramp "Kývalka", 182
   new Ramp "Brno-západ", 190
 
-# console.log kilometers / height * 1000
-gasStations =
-  new GasStation "Újezd", 4.5 # benzinka
-  new GasStation "Újezd", 4.5 # benzinka
 canvas = container.append \canvas
   ..attr \width 250
   ..attr \height height
@@ -107,12 +101,7 @@ for ramp in ramps
   if ramp.dir in <[brno both]>
     highway.finishRamp 0, ramp
 
-return
-for gasStation in gasStations
-  if gasStation.dir in <[praha both]>
-    highway.addGasStation 8, gasStation
-  if gasStation.dir in <[brno both]>
-    highway.addGasStation 0, gasStation
+
 data = ig.data.data.split "\n"
   ..shift!
 outData = for datum in data
