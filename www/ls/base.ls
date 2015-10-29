@@ -9,7 +9,7 @@ class Ramp
 class GasStation
   (@name, @km, @dir = "both", @shape = "both", @special)->
 ramps =
-  new Ramp "Chodov", 0.5, "brno", "on"
+  # new Ramp "Chodov", 0.5, "brno", "on"
   new Ramp "Chodov", 2
   new Ramp "Průhonice", 6.2, "brno"
   new Ramp "Průhonice", 6.6, "praha"
@@ -37,6 +37,7 @@ ramps =
   new Ramp "Ostrovačice", 178
   new Ramp "Kývalka", 182
   new Ramp "Brno-západ", 190
+
 # console.log kilometers / height * 1000
 gasStations =
   new GasStation "Újezd", 4.5 # benzinka
@@ -53,8 +54,20 @@ highway
   ..addGrass 8
   ..addGrassKm 7, 21, 193.5
   ..addGrassKm 1, 21, 193.5
-  ..addLaneEndKm 7, 21, 1, innerLane: yes
-  ..addLaneEndKm 1, 21, 0, innerLane: yes
+
+for ramp in ramps
+  if ramp.dir in <[praha both]>
+    highway.prepareRamp do
+      if ramp.km < 21 then 8 else 7
+      ramp
+  if ramp.dir in <[brno both]>
+    highway.prepareRamp do
+      if ramp.km < 21 then 0 else 1
+      ramp
+
+highway
+  ..addLaneEndKm 7, 21, 1, innerLane: yes, outerLane: yes
+  ..addLaneEndKm 1, 21, 0, innerLane: yes, outerLane: yes
   ..addLaneKm 1, 0, 21
   ..addLane 2
   ..addLane 3
@@ -78,9 +91,9 @@ highway
 highway.drawKm [1 to 193.5] #by 0.5]
 for ramp in ramps
   if ramp.dir in <[praha both]>
-    highway.addRamp 8, ramp
+    highway.finishRamp 8, ramp
   if ramp.dir in <[brno both]>
-    highway.addRamp 0, ramp
+    highway.finishRamp 0, ramp
 
 return
 

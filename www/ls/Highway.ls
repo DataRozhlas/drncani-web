@@ -2,7 +2,7 @@ colors =
   lane: \#D4D4D4
   laneFull: \#C6C6C6
   light: \#626562
-  dark: \#101010
+  dark: \#282828
   grass: \#25482B
   grassLight: \#3F582E
   grassDark: \#3D6047
@@ -57,15 +57,11 @@ class ig.Highway
     endAngle = startAngle + Math.PI / 2
     @ctx.lineWidth = 4
 
-    # @ctx
-    #   ..fillStyle = \red #colors.light
-    #   ..fillRect offsetX, offsetY, laneWidth * 0.7, laneWidth * 1.2
-    offsetXDouble = if dir == 0
+    offsetXDouble = if dir == 0 or dir == 3
       offsetX - laneWidth
-    else if dir == 1
+    else
       offsetX + 2 * laneWidth
 
-    # offsetXDouble = offsetX# - laneWidth
     for sideColor, index in [40 to 90 by 10]
       radius = 2 * (laneWidth - index) - 1
       @ctx
@@ -80,7 +76,6 @@ class ig.Highway
         ..stroke!
     index++
     radius = 2 * (laneWidth - index) - 1
-    # centerline
     @ctx
       ..strokeStyle = colors.light
       ..beginPath!
@@ -92,9 +87,16 @@ class ig.Highway
     @ctx
       ..lineWidth = 2
       ..strokeStyle = colors.laneFull
-      ..beginPath!
-      ..arc offsetXDouble, offsetY, radius, startAngle, endAngle
-      ..stroke!
+    if options.outerLane
+      @ctx
+        ..beginPath!
+        ..arc do
+          offsetXDouble
+          offsetY
+          radius
+          if options.outerLane is \partial then startAngle + 0.28 else startAngle
+          if options.outerLane is \partial-2 then endAngle - 0.28 else endAngle
+        ..stroke!
     if options.innerLane
       @ctx
         ..beginPath!
@@ -183,9 +185,69 @@ class ig.Highway
       @addDelimDash width, height, offsetX, offsetY, 20, 10
       @addDelimFull width, height, offsetX + 3, 0
 
-  addRamp: (number, ramp) ->
-    offsetY = @kmToPx ramp.km
-    offsetX = @getOffset number
+  prepareRamp: (number, ramp) ->
+    {centerY, offsetX, offsetY, width, height} = @calculateRamp number, ramp
+
+    secondLane = if number > 4 then laneWidth else laneWidth * -1
+
+    @ctx
+      ..fillStyle = colors.dark
+      ..beginPath!
+      ..rect offsetX, offsetY, width, height
+      ..rect offsetX + secondLane, offsetY + 15, width, height - 30
+      ..fill!
+
+    delimOffset = 0
+    if number < 4
+      delimOffset += laneWidth
+    else
+      delimOffset += 2
+
+    if number > 4
+      @ctx
+        ..strokeStyle = colors.laneFull
+        ..beginPath!
+      @ctx
+        ..moveTo offsetX, centerY
+        ..lineTo offsetX + laneWidth + 12, centerY
+      for i in [10 to 46 by 8]
+        @ctx
+          ..lineWidth = 2
+          ..moveTo offsetX + laneWidth, centerY - i
+          ..lineTo offsetX - i, centerY
+          ..moveTo offsetX + laneWidth, centerY + i
+          ..lineTo offsetX - i, centerY
+      @ctx.stroke!
+
+      @addLaneEnd number, offsetY + height + laneWidth / 2, 0, outerLane: yes
+      @addLaneEnd number, offsetY + height + laneWidth / 2, 2, innerLane: true, outerLane: \partial
+      @addLaneEnd number, offsetY - laneWidth / 2, 1, innerLane: true, outerLane: \partial
+      @addLaneEnd number, offsetY - laneWidth / 2, 3, outerLane: yes
+    else
+      @ctx
+        ..strokeStyle = colors.laneFull
+        ..beginPath!
+      @ctx
+        ..moveTo offsetX - 12, centerY
+        ..lineTo offsetX + laneWidth, centerY
+      for i in [10 to 46 by 8]
+        @ctx
+          ..moveTo offsetX, centerY - i
+          ..lineTo offsetX + laneWidth + i, centerY
+          ..moveTo offsetX, centerY + i
+          ..lineTo offsetX + laneWidth + i, centerY
+      @ctx.stroke!
+      @addLaneEnd number, offsetY + height + laneWidth / 2, 1, outerLane: yes
+      @addLaneEnd number, offsetY + height + laneWidth / 2, 3, innerLane: true, outerLane: \partial
+      @addLaneEnd number, offsetY - laneWidth / 2, 0, innerLane: true, outerLane: \partial-2
+      @addLaneEnd number, offsetY - laneWidth / 2, 2, outerLane: yes
+
+  finishRamp: (number, ramp) ->
+    {offsetX, offsetY, width, height} = @calculateRamp number, ramp
+
+  calculateRamp: (number, ramp) ->
+    centerY = offsetY = @kmToPx ramp.km
+    offsetX = Math.round @getOffset number
     if number > 4
       offsetX -= 2
     width = laneWidth + 2
@@ -194,15 +256,7 @@ class ig.Highway
       offsetY -= height / 2
     if ramp.shape != "both"
       height /= 2
-    @ctx
-      ..beginPath!
-      ..fillStyle = \#000
-      ..rect offsetX, offsetY, width, height
-      ..fill!
-    delimOffset = 0
-    if number < 4
-      delimOffset += laneWidth - 1
-    @addDelimDash 2, height, offsetX + 0.5 + delimOffset, offsetY + 7, 15, 7
+    {centerY, offsetX, offsetY, width, height}
 
   addGasStation: (number, ramp) ->
     offsetY = @kmToPx ramp.km
