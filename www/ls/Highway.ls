@@ -2,7 +2,8 @@ colors =
   lane: \#D4D4D4
   laneFull: \#C6C6C6
   light: \#888
-  dark: \#282828
+  dark: \#505050
+  verydark: \#282828
   grass: \#25482B
   grassLight: \#3F582E
   grassDark: \#3D6047
@@ -234,7 +235,7 @@ class ig.Highway
     secondLane = if number > 4 then laneWidth else laneWidth * -1
 
     @ctx
-      ..fillStyle = colors.dark
+      ..fillStyle = colors.verydark
       ..beginPath!
       ..rect offsetX, offsetY, width, height
       ..rect offsetX + secondLane, offsetY + 15, width, height - 30
@@ -263,7 +264,7 @@ class ig.Highway
       @ctx.stroke!
 
       @addLaneEnd number, offsetY + height + laneWidth / 2, 0, outerLane: yes
-      @addLaneEnd number, offsetY + height + laneWidth / 2, 2, innerLane: true, outerLane: \partial
+      @addLaneEnd number, offsetY + height + laneWidth / 2, 2, innerLane: true, outerLane: \partial-2
       @addLaneEnd number, offsetY - laneWidth / 2, 1, innerLane: true, outerLane: \partial
       @addLaneEnd number, offsetY - laneWidth / 2, 3, outerLane: yes
     else
@@ -287,6 +288,21 @@ class ig.Highway
 
   finishRamp: (number, ramp) ->
     {centerY, offsetX, offsetY, width, height} = @calculateRamp number, ramp
+
+    offsetX = @getOffset do
+      if number > 4 then number else number + 1
+    offsetX = Math.round offsetX
+    height = 55
+    @ctx
+      ..beginPath!
+      ..fillStyle = colors.dark
+      ..rect offsetX, offsetY - 61, 3, height
+      ..rect offsetX, offsetY + 87, 3, height
+      ..fill!
+
+    @addDelimDash 2, height, offsetX, offsetY - 61 + 6, 16, 8
+    @addDelimDash 2, height, offsetX, offsetY + 87 + 6, 16, 8
+
     textX = if number > 4 then 245 else 5
     @ctx
       ..save!

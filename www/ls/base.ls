@@ -92,14 +92,14 @@ for bridge in bridges
 highway
   ..addDelimKm 1, "full", 0, 21
   ..addDelimKm 2, "dash", 0, 19.5
-  ..addDelimKm 2, "dash-short", 20, 21.5
+  # ..addDelimKm 2, "dash-short", 20, 21.5
   ..addDelimKm 2, "full", 21.5, 193.5, -20
   ..addDelim 3, "dash"
   ..addDelim 4, "full"
   ..addDelim 5, "full"
   ..addDelim 6, "dash"
   ..addDelimKm 7, "dash", 0, 19.5
-  ..addDelimKm 7, "dash-short", 20, 21.5
+  # ..addDelimKm 7, "dash-short", 20, 21.5
   ..addDelimKm 7, "full", 21.5, 193.5, -20
   ..addDelimKm 8, "full", 0, 21
 
@@ -107,9 +107,13 @@ highway
 highway.drawKm [1 to 193.5] #by 0.5]
 for ramp in ramps
   if ramp.dir in <[praha both]>
-    highway.finishRamp 8, ramp
+    highway.finishRamp do
+      if ramp.km < 21 then 8 else 7
+      ramp
   if ramp.dir in <[brno both]>
-    highway.finishRamp 0, ramp
+    highway.finishRamp do
+      if ramp.km < 21 then 0 else 1
+      ramp
 
 
 return
