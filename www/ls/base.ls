@@ -50,18 +50,21 @@ highway
   ..addGrassKm 7, 21, 193.5
   ..addGrassKm 1, 21, 193.5
 
+bridges =
+  [22.353, 22.557]
+  [23.737 23.992]
+  [27.225, 27.723, withRiver: 4]
+  [38.368 38.534]
+  [44.561 44.748]
+  [52.753 52.911]
+  [62 62.241, withRiver: 3]
+  [76.418 76.68, withRiver: 8]
+  [81.116 81.331]
+  [143.995 144.453, withRiver: 1]
 highway
   ..addGrass 4
-  ..addBridgeKm 22.353, 22.557
-  ..addBridgeKm 23.737 23.992
-  ..addBridgeKm 27.225, 27.723, withRiver: 4
-  ..addBridgeKm 38.368 38.534
-  ..addBridgeKm 44.561 44.748
-  ..addBridgeKm 52.753 52.911
-  ..addBridgeKm 62 62.241, withRiver: 3
-  ..addBridgeKm 76.418 76.68, withRiver: 8
-  ..addBridgeKm 81.116 81.331
-  ..addBridgeKm 143.995 144.453, withRiver: 1
+for bridge in bridges
+  highway.addBridgeKm ...bridge
 
 for ramp in ramps
   if ramp.dir in <[praha both]>
@@ -82,6 +85,11 @@ highway
   ..addLane 5
   ..addLane 6
   ..addLaneKm 7, 0, 21
+
+for bridge in bridges
+  highway.addBridgeFinishKm ...bridge
+
+highway
   ..addDelimKm 1, "full", 0, 21
   ..addDelimKm 2, "dash", 0, 19.5
   ..addDelimKm 2, "dash-short", 20, 21.5
@@ -94,6 +102,8 @@ highway
   ..addDelimKm 7, "dash-short", 20, 21.5
   ..addDelimKm 7, "full", 21.5, 193.5, -20
   ..addDelimKm 8, "full", 0, 21
+
+
 highway.drawKm [1 to 193.5] #by 0.5]
 for ramp in ramps
   if ramp.dir in <[praha both]>
@@ -102,6 +112,7 @@ for ramp in ramps
     highway.finishRamp 0, ramp
 
 
+return
 data = ig.data.data.split "\n"
   ..shift!
 outData = for datum in data

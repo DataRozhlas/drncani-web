@@ -1,7 +1,7 @@
 colors =
   lane: \#D4D4D4
   laneFull: \#C6C6C6
-  light: \#626562
+  light: \#888
   dark: \#282828
   grass: \#25482B
   grassLight: \#3F582E
@@ -27,7 +27,7 @@ class ig.Highway
       ..fillStyle = colors.light
       ..rect offsetX, offsetY, laneWidth, height
       ..fill!
-    for sideColor, index in [40 to 90 by 10]
+    for sideColor, index in [80 to 130 by 10]
       x1 = offsetX + index * 2
       x2 = Math.round offsetX + width - index * 2
       @ctx
@@ -66,7 +66,7 @@ class ig.Highway
     if dir == 2
       offsetXDouble += 2
 
-    for sideColor, index in [40 to 90 by 10]
+    for sideColor, index in [80 to 130 by 10]
       radius = 2 * (laneWidth - index) - 1
       @ctx
         ..beginPath!
@@ -164,15 +164,30 @@ class ig.Highway
         ..fillStyle = colors.river
         ..rect 0, offsetY + (height - options.withRiver) / 2, width, options.withRiver
         ..fill!
-    width = laneWidth
-    offsetX = @getOffset 4
+    width = laneWidth * 5
+    offsetX = @getOffset 2
     @ctx
       ..beginPath!
       ..fillStyle = colors.bridge
-      ..rect offsetX, offsetY, width, height
+      ..rect offsetX - 4, offsetY, width + 9, height
       ..fill!
 
+  addBridgeFinishKm: (fromKm, toKm) ->
+    offsetY = @kmToPx fromKm
+    height = @kmToPx toKm - fromKm
+    @addBridgeFinish offsetY, height
 
+  addBridgeFinish: (offsetY = 0, height = @height) ->
+    start = @getOffset 2
+    start2 = @getOffset 5
+    @ctx
+      ..beginPath!
+      ..globalAlpha = 0.4
+      ..fillStyle = \black
+      ..rect start, offsetY, laneWidth * 2, height
+      ..rect start2, offsetY, laneWidth * 2, height
+      ..fill!
+      ..globalAlpha = 1
 
 
   addGuardrail: (number) ->
