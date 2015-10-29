@@ -6,6 +6,8 @@ colors =
   grass: \#25482B
   grassLight: \#3F582E
   grassDark: \#3D6047
+  river: \#234773
+  bridge: \#bbb
 
 laneWidth = 250 / 9
 class ig.Highway
@@ -61,6 +63,8 @@ class ig.Highway
       offsetX - laneWidth
     else
       offsetX + 2 * laneWidth
+    if dir == 2
+      offsetXDouble += 2
 
     for sideColor, index in [40 to 90 by 10]
       radius = 2 * (laneWidth - index) - 1
@@ -146,6 +150,30 @@ class ig.Highway
     @ctx.fillStyle = colors.grassDark
     @sprinkle width * height / 20, offsetX, offsetY, width, height
     @ctx.fill!
+
+  addBridgeKm: (fromKm, toKm, options) ->
+    offsetY = @kmToPx fromKm
+    height = @kmToPx toKm - fromKm
+    @addBridge offsetY, height, options
+
+  addBridge: (offsetY = 0, height = @height, options) ->
+    if options?withRiver
+      width = 250
+      @ctx
+        ..beginPath!
+        ..fillStyle = colors.river
+        ..rect 0, offsetY + (height - options.withRiver) / 2, width, options.withRiver
+        ..fill!
+    width = laneWidth
+    offsetX = @getOffset 4
+    @ctx
+      ..beginPath!
+      ..fillStyle = colors.bridge
+      ..rect offsetX, offsetY, width, height
+      ..fill!
+
+
+
 
   addGuardrail: (number) ->
     height = @height
@@ -243,7 +271,20 @@ class ig.Highway
       @addLaneEnd number, offsetY - laneWidth / 2, 2, outerLane: yes
 
   finishRamp: (number, ramp) ->
-    {offsetX, offsetY, width, height} = @calculateRamp number, ramp
+    {centerY, offsetX, offsetY, width, height} = @calculateRamp number, ramp
+    textX = if number > 4 then 245 else 5
+    @ctx
+      ..save!
+      ..translate textX, centerY
+      ..rotate if number > 4 then Math.PI / 2 * 3 else Math.PI / 2
+      ..font = "bold 30px arial"
+      ..textAlign = "center"
+      ..globalAlpha = 0.6
+      ..fillStyle = \white
+      ..strokeStyle = \black
+      ..strokeText ramp.name.toUpperCase!, 0, 0
+      ..fillText ramp.name.toUpperCase!, 0, 0
+      ..restore!
 
   calculateRamp: (number, ramp) ->
     centerY = offsetY = @kmToPx ramp.km
@@ -326,7 +367,6 @@ class ig.Highway
 
   drawKm: (kms) ->
     @ctx
-      ..textAlign = "center"
       ..strokeStyle = "black"
       ..fillStyle = \#FFC711
       ..lineWidth = 1
@@ -337,11 +377,14 @@ class ig.Highway
         ..rect 114, px - 10, 20, 12
     @ctx.fill!
     @ctx.stroke!
+    @ctx
+      ..textAlign = "center"
+      ..font="10px arial"
+      ..fillStyle = \black
     for km in kms
       px = @kmToPx km
       @ctx
         # ..fillStyle = \yellow
         # ..fillRect 114, px - 10, 20, 12
         # ..strokeRect 114, px - 10, 20, 12
-        ..fillStyle = \black
         ..fillText km, 124, px

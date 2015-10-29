@@ -10,12 +10,13 @@ class GasStation
   (@name, @km, @dir = "both", @shape = "both", @special)->
 ramps =
   # new Ramp "Chodov", 0.5, "brno", "on"
-  new Ramp "Chodov", 2
-  new Ramp "Průhonice", 6.2, "brno"
+  new Ramp "Chodov", 1.5
+  new Ramp "Průhonice", 5.6, "brno"
   new Ramp "Průhonice", 6.6, "praha"
   new Ramp "Modletice", 9.7, "brno", "both", "R1"
   new Ramp "Modletice", 11.7, "praha", "both", "R1"
   new Ramp "Všechromy", 15.6
+  new Ramp "Mirošovice", 22.1, "both", "both", "Mirošovice"
   new Ramp "Hvězdonice", 29
   new Ramp "Ostředek", 34
   new Ramp "Štěrnov", 41
@@ -29,8 +30,8 @@ ramps =
   new Ramp "Jihlava", 112
   new Ramp "Velký Beranov", 119
   new Ramp "Měřín", 134
-  new Ramp "Velké Meziřící", 141
-  new Ramp "Velké Meziřící", 146
+  new Ramp "V. Meziříčí Z", 141
+  new Ramp "V. Meziříčí V", 146
   new Ramp "Lhotka", 153
   new Ramp "Velká Bíteš", 162
   new Ramp "Devět Křížů", 168
@@ -43,7 +44,7 @@ gasStations =
   new GasStation "Újezd", 4.5 # benzinka
   new GasStation "Újezd", 4.5 # benzinka
 canvas = container.append \canvas
-  ..attr \width 300
+  ..attr \width 250
   ..attr \height height
 
 ctx = canvas.node!getContext \2d
@@ -55,6 +56,19 @@ highway
   ..addGrassKm 7, 21, 193.5
   ..addGrassKm 1, 21, 193.5
 
+highway
+  ..addGrass 4
+  ..addBridgeKm 22.353, 22.557
+  ..addBridgeKm 23.737 23.992
+  ..addBridgeKm 27.225, 27.723, withRiver: 4
+  ..addBridgeKm 38.368 38.534
+  ..addBridgeKm 44.561 44.748
+  ..addBridgeKm 52.753 52.911
+  ..addBridgeKm 62 62.241, withRiver: 3
+  ..addBridgeKm 76.418 76.68, withRiver: 8
+  ..addBridgeKm 81.116 81.331
+  ..addBridgeKm 143.995 144.453, withRiver: 1
+
 for ramp in ramps
   if ramp.dir in <[praha both]>
     highway.prepareRamp do
@@ -64,14 +78,12 @@ for ramp in ramps
     highway.prepareRamp do
       if ramp.km < 21 then 0 else 1
       ramp
-
 highway
   ..addLaneEndKm 7, 21, 1, innerLane: yes, outerLane: yes
   ..addLaneEndKm 1, 21, 0, innerLane: yes, outerLane: yes
   ..addLaneKm 1, 0, 21
   ..addLane 2
   ..addLane 3
-  ..addGrass 4
   ..addGuardrail 4
   ..addLane 5
   ..addLane 6
@@ -96,9 +108,6 @@ for ramp in ramps
     highway.finishRamp 0, ramp
 
 return
-
-
-# return
 for gasStation in gasStations
   if gasStation.dir in <[praha both]>
     highway.addGasStation 8, gasStation
