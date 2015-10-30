@@ -1,2 +1,5 @@
 container = d3.select ig.containers.base
-ig.setupHighway container
+highway = ig.setupHighway container
+
+new ig.Map container, highway.scale
+  ..setView 22.95

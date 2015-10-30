@@ -124,4 +124,4 @@ ig.setupHighway = (container) ->
     {km, diffR, diffL, minSpeed}
 
   highway.addData outData
-
+  highway
