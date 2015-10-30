@@ -1,4 +1,7 @@
 L.Icon.Default.imagePath = "https://samizdat.cz/tools/leaflet/images/"
+class Trigger
+  (@latLng, @kmGroupToLoad) ->
+
 class ig.Map
   (@parentElement, @scale) ->
     @element = @parentElement.append \div
@@ -12,9 +15,17 @@ class ig.Map
         maxNativeZoom: 20
         attribution: '&copy; GEODIS BRNO, s.r.o, &copy; Seznam.cz, a.s.'
     baseLayer.addTo @map
+    @triggers = []
+    @displayed = {}
+    @map.on \moveend @~checkForUpdate
 
   setView: (km) ->
+    (err, centerLatLng) <~ @displayData km
+    @map.setView centerLatLng, 19
+
+  displayData: (km, cb) ->
     kmGroup = Math.floor km
+    @displayed[kmGroup] = yes
     (err, data) <~ d3.tsv "../../drncani-postprocess/data/by-km/#{kmGroup}.tsv", (row) ~>
       for key, value of row
         row[key] = switch key
@@ -40,8 +51,16 @@ class ig.Map
       row
 
     position = (km % 1) / 2
-    console.log position
-    @map.setView data[Math.round data.length * position].latLng, 19
-    console.log data.0
+    @triggers.push new Trigger data[0].latLng, kmGroup - 1
+    @triggers.push new Trigger data[Math.round data.length / 2].latLng, kmGroup + 1
+    cb? null, data[Math.round data.length * position].latLng
+
+
+  checkForUpdate: ->
+    currentBounds = @map.getBounds!
+    for trigger in @triggers
+      if currentBounds.contains trigger.latLng
+        if !@displayed[trigger.kmGroupToLoad]
+          @displayData trigger.kmGroupToLoad
 
 
