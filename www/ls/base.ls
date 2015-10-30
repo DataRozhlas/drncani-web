@@ -116,14 +116,14 @@ for ramp in ramps
       ramp
 
 
-return
+# return
 data = ig.data.data.split "\n"
   ..shift!
 outData = for datum in data
   [km, diffR, diffL, minSpeed] = datum.split "\t"
   km = parseFloat km
-  diffR = parseInt diffR, 10
-  diffL = parseInt diffL, 10
+  diffR = parseFloat diffR
+  diffL = parseFloat diffL
   minSpeed  = parseFloat minSpeed
   {km, diffR, diffL, minSpeed}
 

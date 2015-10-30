@@ -376,8 +376,8 @@ class ig.Highway
       topPx = index
       if datum.km == 193.5
         referenceIndex = index
-        xRight = 170
-        xLeft = 180
+        xRight = 180
+        xLeft = 170
       if referenceIndex
         topPx = referenceIndex - (topPx - referenceIndex)
       topPx += 0.5
