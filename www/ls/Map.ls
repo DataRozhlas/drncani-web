@@ -16,7 +16,7 @@ class Trigger
   (@latLng, @kmGroupToLoad, @dir) ->
 
 class ig.Map
-  (@parentElement, @scale) ->
+  (@parentElement) ->
     @element = @parentElement.append \div
       ..attr \class \map
     @map = L.map @element.node!, maxZoom: 21
@@ -33,6 +33,8 @@ class ig.Map
     @layerGroups = {}
     @dataGroups = {}
     @map.on \moveend @~checkForUpdate
+
+  setScale: (@scale) ->
 
   setView: (km) ->
     (err, centerLatLng) <~ @displayData km

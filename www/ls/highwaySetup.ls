@@ -38,10 +38,26 @@ ramps =
   new Ramp "Brno-západ", 190
 
 
-ig.setupHighway = (container) ->
+ig.setupHighway = (container, map) ->
   canvas = container.append \canvas
     ..attr \width 250
     ..attr \height height
+  pointedKm = null
+  lastTime = Date.now!
+  updateMap = ->
+    timeout := null
+    map.setView pointedKm
+  timeout = null
+  canvas.on \mousemove ->
+      y = d3.event.clientY
+      pointedKm := y / height * kilometers
+      now = Date.now!
+      if now - lastTime < 800
+        if timeout is null
+          timeout := setTimeout updateMap, now - lastTime
+      else
+        updateMap!
+
   ctx = canvas.node!getContext \2d
   highway = new ig.Highway ctx, height, kilometers
   toPx = highway~kmToPx
