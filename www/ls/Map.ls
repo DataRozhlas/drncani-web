@@ -26,6 +26,19 @@ class ig.Map
   displayData: (km, cb) ->
     kmGroup = Math.floor km
     @displayed[kmGroup] = yes
+    radius = 0.00002
+    radiusBig = Math.sqrt ((radius ^ 2) + ((radius / 2)^2))
+    radiusSmall = radius / 2
+    angles1 =
+      * Math.PI * 0.35
+        0
+        Math.PI
+        Math.PI * 0.65
+    anglesR =
+      * 0
+        Math.PI * 1.65
+        Math.PI * 1.35
+        Math.PI
     (err, data) <~ d3.tsv "../../drncani-postprocess/data/by-km/#{kmGroup}.tsv", (row) ~>
       for key, value of row
         row[key] = switch key
@@ -33,6 +46,38 @@ class ig.Map
         | "fromTime", "samplesL", "samplesR" => parseInt value, 10
         | otherwise => parseFloat value
       row.latLng = L.latLng [row.lat, row.lon]
+      # row.track = 90
+      trackInRads = (row.track * -1 + 90) / 180 * Math.PI
+      latSkew = Math.cos row.lat / 180 * Math.PI
+      cornersL =
+        L.latLng do
+          * row.lat + (latSkew * radiusBig) * Math.sin angles1[0] + trackInRads
+            row.lon + radiusBig * Math.cos angles1[0] + trackInRads
+        L.latLng do
+          * row.lat + (latSkew * radiusSmall) * Math.sin angles1[1] + trackInRads
+            row.lon + radiusSmall * Math.cos angles1[1] + trackInRads
+        L.latLng do
+          * row.lat + (latSkew * radiusSmall) * Math.sin angles1[2] + trackInRads
+            row.lon + radiusSmall * Math.cos angles1[2] + trackInRads
+        L.latLng do
+          * row.lat + (latSkew * radiusBig) * Math.sin angles1[3] + trackInRads
+            row.lon + radiusBig * Math.cos angles1[3] + trackInRads
+
+      cornersR =
+        L.latLng do
+          * row.lat + (latSkew * radiusSmall) * Math.sin anglesR[0] + trackInRads
+            row.lon + radiusSmall * Math.cos anglesR[0] + trackInRads
+        L.latLng do
+          * row.lat + (latSkew * radiusBig) * Math.sin anglesR[1] + trackInRads
+            row.lon + radiusBig * Math.cos anglesR[1] + trackInRads
+        L.latLng do
+          * row.lat + (latSkew * radiusBig) * Math.sin anglesR[2] + trackInRads
+            row.lon + radiusBig * Math.cos anglesR[2] + trackInRads
+        L.latLng do
+          * row.lat + (latSkew * radiusSmall) * Math.sin anglesR[3] + trackInRads
+            row.lon + radiusSmall * Math.cos anglesR[3] + trackInRads
+
+
       colorL = if row.samplesL
         @scale row.diffL
       else
@@ -41,16 +86,24 @@ class ig.Map
         @scale row.diffR
       else
         '#ddd'
-      leftDiv = "<div style='background-color: #{colorL}'></div>"
-      rightDiv = "<div style='background-color: #{colorR}'></div>"
-      row.icon = L.divIcon do
-        html: "<div style='transform:rotate(#{row.track}deg)'>#{leftDiv}#{rightDiv}</div>"
-        iconSize: [20, 10]
-      L.marker row.latLng, {icon: row.icon, clickable: no}
-        ..addTo @map
+      rotate = "#{row.track}deg"
+      row.markerL = L.polygon do
+        * cornersL
+        * fillColor: colorL
+          fillOpacity: 1
+          stroke: no
+      row.markerL.addTo @map
+      row.markerR = L.polygon do
+        * cornersR
+        * fillColor: colorR
+          fillOpacity: 1
+          stroke: no
+      row.markerR.addTo @map
       row
-
+    # data.0.marker.addTo @map
+    console.log err if err
     position = (km % 1) / 2
+
     @triggers.push new Trigger data[0].latLng, kmGroup - 1
     @triggers.push new Trigger data[Math.round data.length / 2].latLng, kmGroup + 1
     cb? null, data[Math.round data.length * position].latLng
