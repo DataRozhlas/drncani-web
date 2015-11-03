@@ -30,6 +30,7 @@ class ig.Map
     baseLayer.addTo @map
     @triggers = []
     @displayed = {}
+    @loading = {}
     @layerGroups = {}
     @dataGroups = {}
     @map.on \moveend @~checkForUpdate
@@ -51,11 +52,12 @@ class ig.Map
   getData: (kmGroup, cb) ->
     if @dataGroups[kmGroup]
       cb null that
-    else
+    else if !@loading[kmGroup]
       @downloadData kmGroup, cb
 
   downloadData: (kmGroup, cb) ->
     layerGroup = L.layerGroup!
+    @loading[kmGroup] = yes
     (err, data) <~ d3.tsv do
       "../../drncani-postprocess/data/by-km/#{kmGroup}.tsv", (row) ~>
         for key, value of row
