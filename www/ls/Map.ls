@@ -46,8 +46,13 @@ class ig.Map
     @displayed[kmGroup] = yes
     (err, data) <~ @getData kmGroup
     position = (km % 1) / 2
-
-    cb? null, data[Math.round data.length * position].latLng
+    lastDiff = Math.abs data[0].km - km
+    for datum in data
+      diff = Math.abs datum.km - km
+      if diff > lastDiff
+        break
+      lastDiff := diff
+    cb? null, datum.latLng
 
   getData: (kmGroup, cb) ->
     if @dataGroups[kmGroup]
@@ -58,6 +63,7 @@ class ig.Map
   downloadData: (kmGroup, cb) ->
     layerGroup = L.layerGroup!
     @loading[kmGroup] = yes
+    previousRow = null
     (err, data) <~ d3.tsv do
       "../../drncani-postprocess/data/by-km/#{kmGroup}.tsv", (row) ~>
         for key, value of row
@@ -110,6 +116,11 @@ class ig.Map
               fillOpacity: 1
               stroke: no
           row.markerR.addTo layerGroup
+          row.km = if previousRow
+            previousRow.km + 0.001 * previousRow.latLng.distanceTo row.latLng
+          else
+            kmGroup
+          previousRow := row
         row
 
     @triggers.push new Trigger data[0].latLng, kmGroup - 1, -1
