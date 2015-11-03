@@ -405,7 +405,7 @@ class ig.Highway
     for km in kms
       px = @kmToPx km
       @ctx
-        ..rect 114, px - 10, 20, 12
+        ..rect 116, px - 10, 20, 12
     @ctx.fill!
     @ctx.stroke!
     @ctx
@@ -418,4 +418,4 @@ class ig.Highway
         # ..fillStyle = \yellow
         # ..fillRect 114, px - 10, 20, 12
         # ..strokeRect 114, px - 10, 20, 12
-        ..fillText km, 124, px
+        ..fillText km, 126, px
