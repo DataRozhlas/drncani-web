@@ -44,17 +44,19 @@ ig.setupHighway = (container, map) ->
     ..attr \height height
   pointedKm = null
   lastTime = Date.now!
+  timeout = null
   updateMap = ->
     timeout := null
+    lastTime := Date.now!
     map.setView pointedKm
-  timeout = null
+  throttleTime = 300
   canvas.on \mousemove ->
       y = d3.event.clientY
       pointedKm := y / height * kilometers
       now = Date.now!
-      if now - lastTime < 800
+      if (now - lastTime) < throttleTime
         if timeout is null
-          timeout := setTimeout updateMap, now - lastTime
+          timeout := setTimeout updateMap, throttleTime - (now - lastTime)
       else
         updateMap!
 
