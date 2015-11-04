@@ -17,6 +17,7 @@ class Trigger
 
 class ig.Map
   (@parentElement) ->
+    ig.Events @
     @element = @parentElement.append \div
       ..attr \class \map
     @map = L.map @element.node!, maxZoom: 21
@@ -52,6 +53,7 @@ class ig.Map
       if diff > lastDiff
         break
       lastDiff := diff
+    @emit \time datum.fromTime
     cb? null, datum.latLng
 
   getData: (kmGroup, cb) ->
