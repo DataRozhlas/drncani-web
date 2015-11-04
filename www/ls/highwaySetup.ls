@@ -49,7 +49,7 @@ ig.setupHighway = (container, map) ->
     timeout := null
     lastTime := Date.now!
     map.setView pointedKm
-  throttleTime = 300
+  throttleTime = 100
   canvas.on \mousemove ->
       y = d3.event.clientY
       pointedKm := y / height * kilometers
