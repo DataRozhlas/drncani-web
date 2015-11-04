@@ -135,7 +135,6 @@ class ig.Map
     for kmGroup, layer of @layerGroups
       kmGroup = parseInt kmGroup, 10
       if kmGroup not in trigger.kmGroupsToLoad
-        console.log "Remove #{kmGroup}"
         @map.removeLayer layer
 
   checkForUpdate: ->
@@ -144,10 +143,8 @@ class ig.Map
       if currentBounds.contains trigger.latLng
         for kmGroupToLoad in trigger.kmGroupsToLoad
           if @layerGroups[kmGroupToLoad]
-            console.log "Add #{kmGroupToLoad} Cache"
             @layerGroups[kmGroupToLoad].addTo @map
           if !@displayed[kmGroupToLoad]
-            console.log "Add #{kmGroupToLoad} Load"
             @displayData kmGroupToLoad
         @cleanUnusedData trigger
         break
