@@ -63,7 +63,7 @@ class ig.Map
   downloadData: (kmGroup, cb) ->
     layerGroup = L.layerGroup!
     @loading[kmGroup] = yes
-    previousRow = null
+    previousRowToBrno = null
     (err, data) <~ d3.tsv do
       "../../drncani-postprocess/data/by-km/#{kmGroup}.tsv", (row) ~>
         for key, value of row
@@ -116,15 +116,16 @@ class ig.Map
               fillOpacity: 1
               stroke: no
           row.markerR.addTo layerGroup
-          row.km = if previousRow
-            previousRow.km + 0.001 * previousRow.latLng.distanceTo row.latLng
-          else
-            kmGroup
-          previousRow := row
+          if !row.goingBack
+            row.km = if previousRowToBrno
+              previousRowToBrno.km + 0.001 * previousRowToBrno.latLng.distanceTo row.latLng
+            else
+              kmGroup
+            previousRowToBrno := row
         row
 
     @triggers.push new Trigger data[0].latLng, [kmGroup, kmGroup - 1]
-    @triggers.push new Trigger data[Math.round data.length / 2].latLng, [kmGroup, kmGroup + 1]
+    @triggers.push new Trigger previousRowToBrno.latLng, [kmGroup, kmGroup + 1]
     @dataGroups[kmGroup] = data
     @layerGroups[kmGroup] = layerGroup
       ..addTo @map
