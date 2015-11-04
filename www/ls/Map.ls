@@ -13,7 +13,7 @@ anglesR =
     Math.PI * 1.35
     Math.PI
 class Trigger
-  (@latLng, @kmGroupToLoad, @dir) ->
+  (@latLng, @kmGroupsToLoad) ->
 
 class ig.Map
   (@parentElement) ->
@@ -123,32 +123,30 @@ class ig.Map
           previousRow := row
         row
 
-    @triggers.push new Trigger data[0].latLng, kmGroup - 1, -1
-    @triggers.push new Trigger data[Math.round data.length / 2].latLng, kmGroup + 1, +1
+    @triggers.push new Trigger data[0].latLng, [kmGroup, kmGroup - 1]
+    @triggers.push new Trigger data[Math.round data.length / 2].latLng, [kmGroup, kmGroup + 1]
     @dataGroups[kmGroup] = data
     @layerGroups[kmGroup] = layerGroup
       ..addTo @map
-
     cb err, data
 
   cleanUnusedData: (trigger) ->
-    currentKmGroup = trigger.kmGroupToLoad
-    dir = trigger.dir
-    otherKmGroup = currentKmGroup + 1 * (dir * -1)
     for kmGroup, layer of @layerGroups
       kmGroup = parseInt kmGroup, 10
-      if kmGroup not in [currentKmGroup, otherKmGroup]
+      if kmGroup not in trigger.kmGroupsToLoad
+        console.log "Remove #{kmGroup}"
         @map.removeLayer layer
 
   checkForUpdate: ->
     currentBounds = @map.getBounds!
     for trigger in @triggers
       if currentBounds.contains trigger.latLng
-        if @layerGroups[trigger.kmGroupToLoad]
-          @cleanUnusedData trigger
-          @layerGroups[trigger.kmGroupToLoad].addTo @map
-          break
-        if !@displayed[trigger.kmGroupToLoad]
-          @displayData trigger.kmGroupToLoad
-          @cleanUnusedData trigger
-          break
+        for kmGroupToLoad in trigger.kmGroupsToLoad
+          if @layerGroups[kmGroupToLoad]
+            console.log "Add #{kmGroupToLoad} Cache"
+            @layerGroups[kmGroupToLoad].addTo @map
+          if !@displayed[kmGroupToLoad]
+            console.log "Add #{kmGroupToLoad} Load"
+            @displayData kmGroupToLoad
+        @cleanUnusedData trigger
+        break
