@@ -12,16 +12,15 @@ class ig.Player
     firstScriptTag = document.getElementsByTagName 'script' .0
     firstScriptTag.parentNode.insertBefore tag, firstScriptTag
     @cues =
-      new Cue 0, 1443948923776
-      new Cue 20, 1443955077936
-      new Cue 1343, 1443956333804
+      new Cue 867, 1443948923776
+      new Cue 3186, 1443952447886
 
     window.onYouTubeIframeAPIReady = ~>
       player = new YT.Player do
         * 'player'
         * height: '390',
           width: '640',
-          videoId: 'M7lc1UVf-VE',
+          videoId: '9xnWbD_X2FQ',
           events:
             \onReady : (evt) ~> @player = evt.target
             \onStateChange : @~onPlayerStateChange
