@@ -39,8 +39,9 @@ class ig.Map
   setScale: (@scale) ->
 
   setView: (km) ->
-    (err, centerLatLng) <~ @displayData km
-    @map.setView centerLatLng, 19
+    (err, centerDatum) <~ @displayData km
+    @map.setView centerDatum.latLng, 19
+    @emit \time centerDatum.fromTime
 
   displayData: (km, cb) ->
     kmGroup = Math.floor km
@@ -53,8 +54,24 @@ class ig.Map
       if diff > lastDiff
         break
       lastDiff := diff
-    @emit \time datum.fromTime
-    cb? null, datum.latLng
+    cb? null, datum
+
+
+  setViewByTimestamp: (timestamp) ->
+    km = ig.getKmFromTimestamp timestamp
+    return if km is void
+    (err, data) <~ @getData km
+    center = @findClosestDatumToTimestamp data, timestamp
+    @map.setView center.latLng, 19
+
+
+  findClosestDatumToTimestamp: (data, timestamp) ->
+    lastDatum = null
+    for datum in data
+      if datum.fromTime > timestamp
+        return lastDatum
+      lastDatum := datum
+
 
   getData: (kmGroup, cb) ->
     if @dataGroups[kmGroup]

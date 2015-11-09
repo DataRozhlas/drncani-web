@@ -37,11 +37,11 @@ class ig.Player
     return if @player.getPlayerState! != 1
     return if @stopAtFirstChance
     timestamp = @secondsToTrackTimestamp @player.getCurrentTime!
-    @emit \time timestamp
+    @emit \time timestamp if timestamp isnt null
 
   playByTrackTimestamp: (trackTimestamp) ->
     seconds = @trackTimestampToSeconds trackTimestamp
-    @playAt seconds
+    @playAt seconds if seconds isnt null
 
   playAt: (seconds) ->
     return unless @player
@@ -55,7 +55,7 @@ class ig.Player
         cueToUse = cue
       else
         break
-
+    return if cueToUse is null
     seconds = cueToUse.playerSeconds + (trackTimestamp - cueToUse.trackTimestamp) * 0.001
 
   secondsToTrackTimestamp: (seconds) ->
@@ -65,5 +65,5 @@ class ig.Player
         cueToUse = cue
       else
         break
-
+    return if cueToUse is null
     trackTimestamp = cueToUse.trackTimestamp + (seconds - cueToUse.playerSeconds) * 1000

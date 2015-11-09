@@ -12,6 +12,7 @@ externalStyles =
 
 externalData =
   "data": "#__dirname/data/grouped.tsv"
+  "km-reference": "#__dirname/data/km-reference.tsv"
 
 preferScripts = <[ utils.js postInit.js _loadData.js ../data.js init.js _loadExternal.js]>
 deferScripts = <[ geoUtils.js base.js ]>
