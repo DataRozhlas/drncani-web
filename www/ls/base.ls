@@ -1,16 +1,38 @@
 container = d3.select ig.containers.base
 
+overlayIsActive = no
+overlayHideTimeout = null
+
+displayOverlay = ->
+  if overlayHideTimeout
+    clearTimeout overlayHideTimeout
+    overlayHideTimeout := null
+  return if overlayIsActive
+  overlayIsActive := yes
+  overlayContainer.classed \active yes
+
+hideOverlay = ->
+  return if overlayHideTimeout
+  overlayHideTimeout := setTimeout do
+    ->
+      overlayIsActive := no
+      overlayContainer.classed \active no
+      overlayHideTimeout := null
+    1500
+
 highway = ig.setupHighway container
   ..on \km (pointedKm) ->
     map.setView pointedKm
   ..on \overlayMove (pointedY) ->
     overlayContainer.style \transform "translate(0, #{pointedY}px)"
-
+  ..on \mouseover displayOverlay
+  ..on \mouseout hideOverlay
 overlayContainer = container.append \div
   ..attr \class \overlay-container
   ..append \div
     ..attr \class \triangle
-  ..style \transform "translate(0, 20px)"
+  ..on \mouseover displayOverlay
+  ..on \mouseout hideOverlay
 
 downloader1 = new ig.MapDownloader
   ..setScale highway.scale

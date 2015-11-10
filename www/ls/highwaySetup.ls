@@ -65,6 +65,8 @@ ig.setupHighway = (container) ->
         timeout := setTimeout updateMap, throttleTime - (now - lastTime)
     else
       updateMap!
+  canvas.on \mouseover -> highway.emit \mouseover
+  canvas.on \mouseout -> highway.emit \mouseout
   events = ig.Events highway
   toPx = highway~kmToPx
   highway
