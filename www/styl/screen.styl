@@ -7,12 +7,35 @@
 .ig
   .overlay-container
     position absolute
-    top 280px
+    top 0px
     left 300px
     width 600px
     height 250px
-    .map
+    padding 4px
+    border 1px solid #aaa
+    .triangle
       position absolute
+      top -3px
+      left -20px
+      height 15px
+      triangle(30px, 15px, "bottom", #aaa)
+      transform rotate(225deg)
+      z-index 2
+      &:after
+        position absolute
+        top -14px
+        left -15px
+        content ""
+        triangle(28px, 14px, "bottom", white)
+    &:after
+      content ""
+      position absolute
+      top -1px
+      width 245px
+      left (@width * -1)
+      border-bottom 1px solid #aaa
+      pointer-events none
+    .map
       width 100%
       height 100%
   .map-player-container

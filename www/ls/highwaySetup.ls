@@ -47,6 +47,7 @@ ig.setupHighway = (container) ->
   highway = new ig.Highway ctx, height, kilometers
 
   pointedKm = null
+  pointedY = null
   lastTime = Date.now!
   timeout = null
   updateMap = ->
@@ -55,14 +56,15 @@ ig.setupHighway = (container) ->
     highway.emit \km pointedKm
   throttleTime = 100
   canvas.on \mousemove ->
-      y = d3.event.clientY
-      pointedKm := y / height * kilometers
-      now = Date.now!
-      if (now - lastTime) < throttleTime
-        if timeout is null
-          timeout := setTimeout updateMap, throttleTime - (now - lastTime)
-      else
-        updateMap!
+    pointedY := y = d3.event.pageY
+    highway.emit \overlayMove pointedY
+    pointedKm := y / height * kilometers
+    now = Date.now!
+    if (now - lastTime) < throttleTime
+      if timeout is null
+        timeout := setTimeout updateMap, throttleTime - (now - lastTime)
+    else
+      updateMap!
   events = ig.Events highway
   toPx = highway~kmToPx
   highway
