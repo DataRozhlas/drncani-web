@@ -24,18 +24,19 @@ class ig.Map
 
   setScale: (@scale) ->
 
-  setView: (km) ->
-    (err, centerDatum) <~ @displayData km
+  setView: (km, goingBack = no) ->
+    (err, centerDatum) <~ @displayData km, goingBack
     @map.setView centerDatum.latLng, 19
     @emit \time centerDatum.fromTime
 
-  displayData: (km, cb) ->
+  displayData: (km, goingBack = no, cb) ->
     kmGroup = Math.floor km
     @displayed[kmGroup] = yes
     (err, data) <~ @getData kmGroup
     position = (km % 1) / 2
-    lastDiff = Math.abs data[0].km - km
+    lastDiff = Infinity
     for datum in data
+      continue if datum.goingBack isnt goingBack
       diff = Math.abs datum.km - km
       if diff > lastDiff
         break

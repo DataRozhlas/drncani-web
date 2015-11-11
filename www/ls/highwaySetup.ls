@@ -48,15 +48,17 @@ ig.setupHighway = (container) ->
 
   pointedKm = null
   pointedY = null
+  pointedX = null
   lastTime = Date.now!
   timeout = null
   updateMap = ->
     timeout := null
     lastTime := Date.now!
-    highway.emit \km pointedKm
+    highway.emit \km pointedKm, pointedX > 125
   throttleTime = 100
   canvas.on \mousemove ->
     pointedY := y = d3.event.pageY
+    pointedX := d3.event.pageX
     highway.emit \overlayMove pointedY
     pointedKm := y / height * kilometers
     now = Date.now!

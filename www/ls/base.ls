@@ -21,8 +21,8 @@ hideOverlay = ->
     1500
 
 highway = ig.setupHighway container
-  ..on \km (pointedKm) ->
-    map.setView pointedKm
+  ..on \km (pointedKm, goingBack) ->
+    map.setView pointedKm, goingBack
   ..on \overlayMove (pointedY) ->
     overlayContainer.style \transform "translate(0, #{pointedY}px)"
   ..on \mouseover displayOverlay

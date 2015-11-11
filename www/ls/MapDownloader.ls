@@ -29,6 +29,7 @@ class ig.MapDownloader
   downloadData: (kmGroup, cb) ->
     layerGroup = L.layerGroup!
     previousRowToBrno = null
+    previousRowToPrague = null
     (err, data) <~ d3.tsv do
       "../../drncani-postprocess/data/by-km/#{kmGroup}.tsv"
       (row) ~>
@@ -88,6 +89,12 @@ class ig.MapDownloader
             else
               kmGroup
             previousRowToBrno := row
+          else
+            row.km = if previousRowToPrague
+              previousRowToPrague.km - 0.001 * previousRowToPrague.latLng.distanceTo row.latLng
+            else
+              kmGroup + 1
+            previousRowToPrague := row
         row
     lastRowToBrno = previousRowToBrno
     @kmGroups[kmGroup] = {layerGroup, data, lastRowToBrno}
