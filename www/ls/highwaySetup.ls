@@ -77,11 +77,11 @@ ig.setupHighway = (container) ->
   canvas.on \mouseout -> highway.emit \mouseout
   events = ig.Events highway
   toPx = highway~kmToPx
-  highway
-    ..addGrass 0
-    ..addGrass 8
-    ..addGrassKm 7, 21, 193.5
-    ..addGrassKm 1, 21, 193.5
+  # highway
+  #   ..addGrass 0
+  #   ..addGrass 8
+  #   ..addGrassKm 7, 21, 193.5
+  #   ..addGrassKm 1, 21, 193.5
 
   bridges =
     [22.353, 22.557]
