@@ -232,6 +232,18 @@ class ig.Highway
   prepareRamp: (number, ramp) ->
     {centerY, offsetX, offsetY, width, height} = @calculateRamp number, ramp
 
+    textX = if number > 4 then 245 else 5
+    @ctx
+      ..save!
+      ..translate textX, centerY
+      ..rotate if number > 4 then Math.PI / 2 * 3 else Math.PI / 2
+      ..font = "bold 30px arial"
+      ..textAlign = "center"
+      ..strokeStyle = \black
+      ..fillStyle = \#777
+      ..fillText ramp.name.toUpperCase!, 0, 0
+      ..restore!
+
     secondLane = if number > 4 then laneWidth else laneWidth * -1
 
     @ctx
@@ -254,14 +266,15 @@ class ig.Highway
       @ctx
         ..moveTo offsetX, centerY
         ..lineTo offsetX + laneWidth + 12, centerY
-      for i in [10 to 46 by 8]
-        @ctx
-          ..lineWidth = 2
-          ..moveTo offsetX + laneWidth, centerY - i
-          ..lineTo offsetX - i, centerY
-          ..moveTo offsetX + laneWidth, centerY + i
-          ..lineTo offsetX - i, centerY
-      @ctx.stroke!
+      if ramp.km > 20
+        for i in [10 to 46 by 8]
+          @ctx
+            ..lineWidth = 2
+            ..moveTo offsetX + laneWidth, centerY - i
+            ..lineTo offsetX - i, centerY
+            ..moveTo offsetX + laneWidth, centerY + i
+            ..lineTo offsetX - i, centerY
+        @ctx.stroke!
 
       @addLaneEnd number, offsetY + height + laneWidth / 2, 0, outerLane: yes
       @addLaneEnd number, offsetY + height + laneWidth / 2, 2, innerLane: true, outerLane: \partial-2
@@ -274,17 +287,19 @@ class ig.Highway
       @ctx
         ..moveTo offsetX - 12, centerY
         ..lineTo offsetX + laneWidth, centerY
-      for i in [10 to 46 by 8]
-        @ctx
-          ..moveTo offsetX, centerY - i
-          ..lineTo offsetX + laneWidth + i, centerY
-          ..moveTo offsetX, centerY + i
-          ..lineTo offsetX + laneWidth + i, centerY
-      @ctx.stroke!
+      if ramp.km > 20
+        for i in [10 to 46 by 8]
+          @ctx
+            ..moveTo offsetX, centerY - i
+            ..lineTo offsetX + laneWidth + i, centerY
+            ..moveTo offsetX, centerY + i
+            ..lineTo offsetX + laneWidth + i, centerY
+        @ctx.stroke!
       @addLaneEnd number, offsetY + height + laneWidth / 2, 1, outerLane: yes
       @addLaneEnd number, offsetY + height + laneWidth / 2, 3, innerLane: true, outerLane: \partial
       @addLaneEnd number, offsetY - laneWidth / 2, 0, innerLane: true, outerLane: \partial-2
       @addLaneEnd number, offsetY - laneWidth / 2, 2, outerLane: yes
+
 
   finishRamp: (number, ramp) ->
     {centerY, offsetX, offsetY, width, height} = @calculateRamp number, ramp
@@ -310,10 +325,11 @@ class ig.Highway
       ..rotate if number > 4 then Math.PI / 2 * 3 else Math.PI / 2
       ..font = "bold 30px arial"
       ..textAlign = "center"
+      ..strokeStyle = \black
+      ..globalAlpha = 1
+      # ..strokeText ramp.name.toUpperCase!, 0, 0
       ..globalAlpha = 0.6
       ..fillStyle = \white
-      ..strokeStyle = \black
-      ..strokeText ramp.name.toUpperCase!, 0, 0
       ..fillText ramp.name.toUpperCase!, 0, 0
       ..restore!
 
