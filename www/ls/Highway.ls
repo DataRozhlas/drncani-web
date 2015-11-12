@@ -11,9 +11,11 @@ colors =
   bridge: \#bbb
 
 laneWidth = 250 / 9
+
+
 class ig.Highway
-  (@ctx, @height, @kilometers) ->
-    @pxPerKm = @height / @kilometers
+  (@ctx, @height, @kilometers, @heightHeader) ->
+    @pxPerKm = (@height - 2 * @heightHeader) / @kilometers
 
   addLaneKm: (number, fromKm, toKm, options) ->
     offsetY = @kmToPx fromKm
@@ -362,7 +364,10 @@ class ig.Highway
     number * laneWidth
 
   kmToPx: (kilometer) ->
-    kilometer * @pxPerKm
+    if kilometer
+      @heightHeader + kilometer * @pxPerKm
+    else
+      0
 
   addDelimFull: (width, height, offsetX, offsetY) ->
     @ctx
@@ -389,9 +394,9 @@ class ig.Highway
     xLeft = 70
     xRight = 60
     for datum, index in data
-      topPx = index
+      topPx = index + @heightHeader
       if datum.km == 193.5
-        referenceIndex = index
+        referenceIndex = index + @heightHeader
         xRight = 180
         xLeft = 170
       if referenceIndex

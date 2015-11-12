@@ -1,6 +1,6 @@
 kilometers = 193.5
-
-height = kilometers * 50
+heightHeader = 20
+height = kilometers * 50 + 2 * heightHeader
 
 class Ramp
   (@name, @km, @dir = "both", @shape = "both", @special)->
@@ -43,9 +43,15 @@ ig.setupHighway = (container) ->
   canvas = container.append \canvas
     ..attr \width 250
     ..attr \height height
+  container
+    ..append \div
+      ..attr \class \header
+    ..append \div
+      ..attr \class \footer
+
 
   ctx = canvas.node!getContext \2d
-  highway = new ig.Highway ctx, height, kilometers
+  highway = new ig.Highway ctx, height, kilometers, heightHeader
 
   pointedKm = null
   pointedY = null
@@ -135,7 +141,7 @@ ig.setupHighway = (container) ->
     ..addDelimKm 8, "full", 0, 21
 
 
-  highway.drawKm [1 to 193.5]
+  highway.drawKm [0 to 193.5]
   for ramp in ramps
     if ramp.dir in <[praha both]>
       highway.finishRamp do
