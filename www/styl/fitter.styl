@@ -17,28 +17,30 @@ overlayTextColor = white
     font-family 'Roboto Condensed'
     font-weight 700
     padding-bottom 8px !important
-    border-bottom 10px solid white
-
     margin-top 31px !important
     line-height 67.9px
     margin-bottom 0px !important
     color overlayTextColor
     // text-shadow 0px 0px 10px #0
     position absolute
-    margin-left 100px !important
-    text-align left
+    width 100%
+    text-align center
     z-index 40
+    span
+      border-bottom 10px solid white
   p.perex
     position relative
-    top 132px
-    left 100px
-    width 445px
+    top 172px
+    left 0px
+    width 100%
     font-weight 100
-    text-align left
+    text-align center
     line-height 41px
     font-size 18px
     color overlayTextColor
     text-shadow 0px 0px 10px #0
+    padding 0px 250px
+    width 500px
     margin 0px
     z-index 40
   > p
@@ -143,8 +145,17 @@ div.hero
   bottom 0px
   width 100%
   min-width 1000px
-  background #6 url('https://samizdat.cz/data/jizni-mesto/www/img/cover.jpg') no-repeat center bottom
+  background linear-gradient(to bottom, white 49%, black 51%);
+  background #6 url('https://samizdat.cz/data/drncani-web/www/media/cover.jpg') no-repeat center bottom
   background-size cover
+  overflow hidden
+  video
+    position absolute
+    left 50%
+    top 50%
+    transform translate(-50%,-50%)
+    min-width 100%
+    min-height 100%
   .overlay
     position absolute
     top 0px
@@ -182,9 +193,9 @@ div.hero
   a.scroll-btn
     z-index 50
     position absolute
-    top 520px
+    top 560px
     left 50%
-    margin-left -402px
+    transform translate(-50%, 0)
     text-transform uppercase
     color overlayTextColor
     font-weight 200

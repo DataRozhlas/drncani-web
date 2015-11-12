@@ -3,6 +3,7 @@ ig.fit = ->
   return unless $?
   $body = $ 'body'
   $hero = $ "<div class='hero'></div>"
+    ..append "<video src='https://samizdat.cz/data/drncani-web/www/media/intro.mp4' autoplay loop>"
     ..append "<div class='overlay'></div>"
     ..append "<span class='copy'>foto: ČTK</span>"
     ..append "<a href='#' class='scroll-btn'>Číst dál</a>"
@@ -14,7 +15,7 @@ ig.fit = ->
         .tween "scroll" scrollTween offset
   $body.prepend $hero
 
-  $ '#article h1' .html 'D1'
+  $ '#article h1' .html '<span>D1</span>'
 
   $filling = $ "<div class='ig filling'></div>"
     ..css \height $hero.height! + 50
