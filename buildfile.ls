@@ -11,6 +11,7 @@ externalStyles =
   ...
 
 externalData =
+  "style": "#__dirname/www/screen.css"
   "data": "#__dirname/data/grouped.tsv"
   "km-reference": "#__dirname/data/km-reference.tsv"
 

@@ -1,5 +1,7 @@
-container = d3.select ig.containers.base
-
+ig.fit!
+element = d3.select ig.containers.base
+container = element.append \div
+  ..attr \class \highway-container
 overlayIsActive = no
 overlayHideTimeout = null
 
@@ -37,7 +39,6 @@ overlayContainer = container.append \div
 downloader1 = new ig.MapDownloader
   ..setScale highway.scale
 map = new ig.Map overlayContainer, downloader1
-
 # downloader2 = new ig.MapDownloader
 #   ..setScale highway.scale
 # mapPlayerContainer = container.append \div

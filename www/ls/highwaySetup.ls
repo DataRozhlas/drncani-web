@@ -39,6 +39,7 @@ ramps =
 
 
 ig.setupHighway = (container) ->
+
   canvas = container.append \canvas
     ..attr \width 250
     ..attr \height height
@@ -56,9 +57,14 @@ ig.setupHighway = (container) ->
     lastTime := Date.now!
     highway.emit \km pointedKm, pointedX > 125
   throttleTime = 100
+  offset = null
+  computeOffset = ->
+    offset := ig.utils.offset canvas.node!
+  computeOffset!
+  setInterval computeOffset, 1000
   canvas.on \mousemove ->
-    pointedY := y = d3.event.pageY
-    pointedX := d3.event.pageX
+    pointedY := y = d3.event.pageY - offset.top
+    pointedX := d3.event.pageX - offset.left
     highway.emit \overlayMove pointedY
     pointedKm := y / height * kilometers
     now = Date.now!
