@@ -28,7 +28,7 @@ class ig.Player
   playAt: (seconds) ->
     return unless @player
     @player.seekTo seconds
-    @stopAtFirstChance = yes
+    # @stopAtFirstChance = yes
 
   trackTimestampToSeconds: (trackTimestamp) ->
     cueToUse = null
