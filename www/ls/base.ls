@@ -1,4 +1,5 @@
 ig.fit!
+return unless ig.containers.base
 element = d3.select ig.containers.base
 container = element.append \div
   ..attr \class \highway-container
@@ -39,12 +40,5 @@ overlayContainer = container.append \div
 downloader1 = new ig.MapDownloader
   ..setScale highway.scale
 map = new ig.Map overlayContainer, downloader1
-# downloader2 = new ig.MapDownloader
-#   ..setScale highway.scale
-# mapPlayerContainer = container.append \div
-  # ..attr \class \map-player-container
-# mapToPlayer = new ig.Map mapPlayerContainer, downloader2
-# player = new ig.Player mapPlayerContainer
-# mapToPlayer.on \time -> player.playByTrackTimestamp it
-# player.on \time -> mapToPlayer.setViewByTimestamp it
 
+ig.highwayScale = highway.scale

@@ -11,7 +11,7 @@ for line, index in lines
   i1 = index
   i2 = lines.length * 2 - index - 1
   points[i1] = {time:line.time, km:line.km}
-  points[i2] = {time:line.timeBack, km:line.km}
+  points[i2] = {time:line.timeBack, km:line.km - 1}
 
 ig.getKmFromTimestamp = (timestamp) ->
   lastPoint = null

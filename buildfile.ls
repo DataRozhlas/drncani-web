@@ -16,7 +16,7 @@ externalData =
   "km-reference": "#__dirname/data/km-reference.tsv"
 
 preferScripts = <[ utils.js postInit.js _loadData.js ../data.js init.js _loadExternal.js]>
-deferScripts = <[ geoUtils.js base.js ]>
+deferScripts = <[ geoUtils.js base.js map-player.js ]>
 develOnlyScripts = <[ _loadData.js _loadExternal.js]>
 gzippable = <[ www/index.deploy.html www/script.deploy.js ]>
 safe-deployable =
