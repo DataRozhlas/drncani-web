@@ -31,7 +31,7 @@ class ig.MapDownloader
     previousRowToBrno = null
     previousRowToPrague = null
     (err, data) <~ d3.tsv do
-      "../../drncani-postprocess/data/by-km/#{kmGroup}.tsv"
+      "https://samizdat.cz/data-r/drncani-postprocess/data/by-km/#{kmGroup}.tsv"
       (row) ~>
         for key, value of row
           row[key] = switch key
