@@ -61,6 +61,7 @@ class ig.MapDownloader
             * fillColor: colorL
               fillOpacity: 1
               stroke: no
+              clickable: no
           row.markerL.addTo layerGroup
         if row.samplesR
           colorR = @scale row.diffR
@@ -82,6 +83,7 @@ class ig.MapDownloader
             * fillColor: colorR
               fillOpacity: 1
               stroke: no
+              clickable: no
           row.markerR.addTo layerGroup
           if !row.goingBack
             row.km = if previousRowToBrno
