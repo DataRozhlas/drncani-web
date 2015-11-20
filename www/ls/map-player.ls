@@ -1,11 +1,11 @@
 videoIds =
-  "LhZUpSV8BB8"
   "9xnWbD_X2FQ"
+  "LhZUpSV8BB8"
 
 cues =
-  * new ig.PlayerCue 867, 1443948923776
-    new ig.PlayerCue 3186, 1443952447886
-  * new ig.PlayerCue 698,  1443964818687
+  * new ig.PlayerCue 867, 1443948920776
+    new ig.PlayerCue 3186, 1443952630590
+  * new ig.PlayerCue 698,  1443964795687
     ...
 class ig.TopFive
   (@timestamp, @text, @desc) ->
@@ -46,7 +46,7 @@ players = for let name, index in <[ player-1 player-2 ]>
       ..attr \href \#
       ..on \click ->
         d3.event.preventDefault!
-        player.playByTrackTimestamp it.timestamp - 3000
+        player.playByTrackTimestamp it.timestamp - 5000
     ..append \span
       ..html -> ": " + it.desc
 
