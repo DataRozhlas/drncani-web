@@ -21,6 +21,13 @@ class ig.Map
     @layerGroups = {}
     @dataGroups = {}
     @map.on \moveend @~checkForUpdate
+    @element.append \a
+      ..attr do
+          \href   : \https://mapy.cz
+          \target : \_blank
+          \class  : \szn-logo
+      ..append \img
+        ..attr \src \//api.mapy.cz/img/api/logo.png
 
   setScale: (@scale) ->
 
