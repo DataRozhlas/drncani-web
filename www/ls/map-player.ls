@@ -40,15 +40,21 @@ players = for let name, index in <[ player-1 player-2 ]>
     cues[index]
   mapToPlayer.on \time -> player.playByTrackTimestamp it
   player.on \time -> mapToPlayer.setViewByTimestamp it
-  element.append \ol .selectAll \li .data topFive[index] .enter!append \li
-    ..append \a
-      ..html (.text)
-      ..attr \href \#
-      ..on \click ->
-        d3.event.preventDefault!
-        player.playByTrackTimestamp it.timestamp - 5000
-    ..append \span
-      ..html -> ": " + it.desc
+  mapToPlayer.setViewByTimestamp if index then 1443964818687 else 1443948966079
+  element
+    ..append \div
+      ..attr \class \list
+      ..append \b
+        ..html "Největší výmoly ve směru na #{if index then 'Prahu' else 'Brno'}"
+      ..append \ol .selectAll \li .data topFive[index] .enter!append \li
+        ..append \a
+          ..html (.text)
+          ..attr \href \#
+          ..on \click ->
+            d3.event.preventDefault!
+            player.playByTrackTimestamp it.timestamp - 5000
+        ..append \span
+          ..html -> ": " + it.desc
 
   player
 
