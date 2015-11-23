@@ -8,8 +8,12 @@ class ig.Player
       ..attr \class \player
       ..attr \id "player-#{@videoId}"
     setInterval @~tick, 250
+    @isFirstPlay = yes
 
   onPlayerStateChange: ({data}) ->
+    if data == 1 and @isFirstPlay
+      @player.seekTo @cues.0.playerSeconds
+      @isFirstPlay = no
     if data == 1 and @stopAtFirstChance
       @player.pauseVideo!
       @stopAtFirstChance = no
