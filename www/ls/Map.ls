@@ -6,21 +6,27 @@ class ig.Map
     ig.Events @
     @element = @parentElement.append \div
       ..attr \class \map
-    @map = L.map @element.node!, maxZoom: 21
+    @map = L.map do
+      @element.node!
+      maxZoom: 21
+      minZoom: 16
     baseLayer = L.tileLayer do
       * "//m1.mapserver.mapy.cz/ophoto-m/{z}-{x}-{y}"
-      * zIndex: 1
-        opacity: 1
-        maxZoom: 21
+      * maxZoom: 21
         maxNativeZoom: 20
         attribution: '&copy; GEODIS BRNO, s.r.o, &copy; Seznam.cz, a.s.'
     baseLayer.addTo @map
+    dataLayer = L.tileLayer do
+      * "https://samizdat.cz/tiles/drncani-d1/{z}/{x}/{y}.png"
+      * maxZoom: 20
+        maxNativeZoom: 19
+        attribution: 'data Samizdat, ČRo'
+    dataLayer.addTo @map
     @triggers = []
     @displayed = {}
     @loading = {}
     @layerGroups = {}
     @dataGroups = {}
-    @map.on \moveend @~checkForUpdate
     @element.append \a
       ..attr do
           \href   : \https://mapy.cz
@@ -76,27 +82,5 @@ class ig.Map
   downloadData: (kmGroup, cb) ->
     @loading[kmGroup] = yes
     (err, {data, layerGroup, lastRowToBrno}) <~ @mapDownloader.getData kmGroup
-    @triggers.push new Trigger data[0].latLng, [kmGroup, kmGroup - 1]
-    @triggers.push new Trigger lastRowToBrno.latLng, [kmGroup, kmGroup + 1]
     @dataGroups[kmGroup] = data
-    @layerGroups[kmGroup] = layerGroup
-      ..addTo @map
     cb err, data
-
-  cleanUnusedData: (trigger) ->
-    for kmGroup, layer of @layerGroups
-      kmGroup = parseInt kmGroup, 10
-      if kmGroup not in trigger.kmGroupsToLoad
-        @map.removeLayer layer
-
-  checkForUpdate: ->
-    currentBounds = @map.getBounds!
-    for trigger in @triggers
-      if currentBounds.contains trigger.latLng
-        for kmGroupToLoad in trigger.kmGroupsToLoad
-          if @layerGroups[kmGroupToLoad]
-            @layerGroups[kmGroupToLoad].addTo @map
-          if !@displayed[kmGroupToLoad]
-            @displayData kmGroupToLoad
-        @cleanUnusedData trigger
-        break
