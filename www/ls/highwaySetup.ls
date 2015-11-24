@@ -69,10 +69,10 @@ ig.setupHighway = (container) ->
   computeOffset!
   setInterval computeOffset, 1000
   canvas.on \mousemove ->
-    pointedY := y = d3.event.pageY - offset.top
+    pointedY := y = (d3.event.pageY - offset.top)
     pointedX := d3.event.pageX - offset.left
     highway.emit \overlayMove pointedY
-    pointedKm := y / height * kilometers
+    pointedKm := (y - heightHeader) / (height - 2 * heightHeader) * kilometers
     now = Date.now!
     if (now - lastTime) < throttleTime
       if timeout is null
@@ -141,7 +141,8 @@ ig.setupHighway = (container) ->
     ..addDelimKm 8, "full", 0, 21
 
 
-  highway.drawKm [0 to 193.5]
+  highway.drawKm [1 to 193.5]
+  highway.drawKm [0.01]
   for ramp in ramps
     if ramp.dir in <[praha both]>
       highway.finishRamp do

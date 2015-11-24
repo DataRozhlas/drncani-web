@@ -19,7 +19,7 @@ class ig.Highway
 
   addLaneKm: (number, fromKm, toKm, options) ->
     offsetY = @kmToPx fromKm
-    height = @kmToPx toKm - fromKm
+    height = (@kmToPx toKm) - offsetY
     @addLane number, height, offsetY, options
 
   addLane: (number, height = @height, offsetY = 0, options = {}) ->
@@ -134,7 +134,7 @@ class ig.Highway
 
   addGrassKm: (number, fromKm, toKm) ->
     offsetY = @kmToPx fromKm
-    height = @kmToPx toKm - fromKm
+    height = (@kmToPx toKm) - offsetY
     @addGrass number, offsetY, height
 
   addGrass: (number, offsetY = 0, height = @height) ->
@@ -156,7 +156,7 @@ class ig.Highway
 
   addBridgeKm: (fromKm, toKm, options) ->
     offsetY = @kmToPx fromKm
-    height = @kmToPx toKm - fromKm
+    height = (@kmToPx toKm) - offsetY
     @addBridge offsetY, height, options
 
   addBridge: (offsetY = 0, height = @height, options) ->
@@ -177,7 +177,7 @@ class ig.Highway
 
   addBridgeFinishKm: (fromKm, toKm) ->
     offsetY = @kmToPx fromKm
-    height = @kmToPx toKm - fromKm
+    height = (@kmToPx toKm) - offsetY
     @addBridgeFinish offsetY, height
 
   addBridgeFinish: (offsetY = 0, height = @height) ->
@@ -428,7 +428,7 @@ class ig.Highway
     for km in kms
       px = @kmToPx km
       @ctx
-        ..rect 116, px - 10, 20, 12
+        ..rect 116, px - 6, 20, 12
     @ctx.fill!
     @ctx.stroke!
     @ctx
@@ -441,4 +441,4 @@ class ig.Highway
         # ..fillStyle = \yellow
         # ..fillRect 114, px - 10, 20, 12
         # ..strokeRect 114, px - 10, 20, 12
-        ..fillText km, 126, px
+        ..fillText (Math.round km), 126, px + 4

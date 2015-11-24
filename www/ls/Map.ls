@@ -81,6 +81,6 @@ class ig.Map
 
   downloadData: (kmGroup, cb) ->
     @loading[kmGroup] = yes
-    (err, {data, layerGroup, lastRowToBrno}) <~ @mapDownloader.getData kmGroup
+    (err, {data, layerGroup}) <~ @mapDownloader.getData kmGroup
     @dataGroups[kmGroup] = data
     cb err, data

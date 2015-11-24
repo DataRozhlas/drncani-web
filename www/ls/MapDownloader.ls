@@ -39,20 +39,7 @@ class ig.MapDownloader
           | "fromTime", "samplesL", "samplesR" => parseInt value, 10
           | otherwise => parseFloat value
         row.latLng = L.latLng [row.lat, row.lon]
-
-        if !row.goingBack
-          row.km = if previousRowToBrno
-            previousRowToBrno.km + 0.001 * previousRowToBrno.latLng.distanceTo row.latLng
-          else
-            kmGroup
-          previousRowToBrno := row
-        else
-          row.km = if previousRowToPrague
-            previousRowToPrague.km - 0.001 * previousRowToPrague.latLng.distanceTo row.latLng
-          else
-            kmGroup + 1
-          previousRowToPrague := row
+        row.km = parseFloat row.km
         row
-    lastRowToBrno = previousRowToBrno
-    @kmGroups[kmGroup] = {layerGroup, data, lastRowToBrno}
+    @kmGroups[kmGroup] = {layerGroup, data}
     cb null @kmGroups[kmGroup]
