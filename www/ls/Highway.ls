@@ -397,7 +397,7 @@ class ig.Highway
     xRight = 60
     for datum, index in data
       topPx = index + @heightHeader
-      if index == 11612
+      if index == 12580
         referenceIndex = index + @heightHeader
         xRight = 181
         xLeft = 171
