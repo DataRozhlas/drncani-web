@@ -19,7 +19,9 @@ ig.fit = ->
 
   $filling = $ "<div class='ig filling'></div>"
     ..css \height $hero.height! + 50
-  $ "p.perex" .after $filling
+  $ "p.perex"
+    ..html "Český rozhlas změřil intenzitu otřesů při jízdě po nejděravější české dálnici. Projeďte si ji kilometr po kilometru v interaktivní mapě a podívejte se,<br>jak to hází na nejzanedbanějších úsecích, a jak na nově opravených."
+    ..after $filling
 
   $shares = $ "<div class='shares'>
     <a class='share cro' title='Zpět nahoru' href='#'><img src='https://samizdat.cz/tools/cro-logo/cro-logo-light.svg'></a>
