@@ -1,6 +1,6 @@
 kilometers = 193.5
 heightHeader = 20
-height = kilometers * 50 + 2 * heightHeader
+height = kilometers * 60 + 2 * heightHeader
 
 class Ramp
   (@name, @km, @dir = "both", @shape = "both", @special)->
@@ -139,8 +139,8 @@ ig.setupHighway = (container) ->
         if ramp.km < 21 then 0 else 1
         ramp
   highway
-    ..addLaneEndKm 7, 21, 1, innerLane: yes, outerLane: yes
-    ..addLaneEndKm 1, 21, 0, innerLane: yes, outerLane: yes
+    ..addLaneEndKm 7, 21.2, 1, innerLane: yes, outerLane: yes
+    ..addLaneEndKm 1, 21.2, 0, innerLane: yes, outerLane: yes
     ..addLaneKm 1, 0, 21
     ..addLane 2
     ..addLane 3
@@ -154,13 +154,13 @@ ig.setupHighway = (container) ->
 
   highway
     ..addDelimKm 1, "full", 0, 21
-    ..addDelimKm 2, "dash", 0, 19.5
+    ..addDelimKm 2, "dash", 0, 19.8
     ..addDelimKm 2, "full", 21.5, 193.5, -20
     ..addDelim 3, "dash"
     ..addDelim 4, "full"
     ..addDelim 5, "full"
     ..addDelim 6, "dash"
-    ..addDelimKm 7, "dash", 0, 19.5
+    ..addDelimKm 7, "dash", 0, 19.8
     ..addDelimKm 7, "full", 21.5, 193.5, -20
     ..addDelimKm 8, "full", 0, 21
 
@@ -179,12 +179,10 @@ ig.setupHighway = (container) ->
   data = ig.data.data.split "\n"
     ..shift!
   outData = for datum in data
-    [km, diffR, diffL, minSpeed] = datum.split "\t"
-    km = parseFloat km
+    [diffR, diffL] = datum.split "\t"
     diffR = parseFloat diffR
     diffL = parseFloat diffL
-    minSpeed  = parseFloat minSpeed
-    {km, diffR, diffL, minSpeed}
+    {diffR, diffL}
 
   highway.addData outData
   highway
