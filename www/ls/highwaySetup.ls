@@ -36,10 +36,30 @@ ramps =
   new Ramp "Ostrovačice", 178
   new Ramp "Kývalka", 182
   new Ramp "Brno-západ", 190
+class Section
+  ([@fromKm, @toKm], @title) ->
+  setHighway: (highway) ->
+    @top = highway.kmToPx @fromKm
+    @bottom = highway.kmToPx @toKm
+    @height = @bottom - @top
 
+sections =
+  new Section [41 49] "rekonstruovaný úsek"
+  new Section [66 75] "rekonstruovaný úsek"
+  new Section [104 112] "rekonstruovaný úsek"
+  new Section [153 162] "rekonstruovaný úsek"
+  new Section [29 34] "nyní v rekonstrukci"
+  new Section [134 141] "nyní v rekonstrukci"
+  new Section [178 182] "nyní v rekonstrukci"
 
 ig.setupHighway = (container) ->
+  sectionContainer = container.append \div
+    ..attr \class \sections
 
+  sectionElement = sectionContainer.selectAll \div .data sections .enter!append \div
+    ..attr \class \section
+    ..append \span
+      ..html (.title)
   canvas = container.append \canvas
     ..attr \width 250
     ..attr \height height
@@ -52,7 +72,10 @@ ig.setupHighway = (container) ->
 
   ctx = canvas.node!getContext \2d
   highway = new ig.Highway ctx, height, kilometers, heightHeader
-
+  sections.forEach (.setHighway highway)
+  sectionElement
+    ..style \top -> "#{it.top}px"
+    ..style \width -> "#{it.height}px"
   pointedKm = null
   pointedY = null
   pointedX = null
@@ -100,6 +123,7 @@ ig.setupHighway = (container) ->
     [76.418 76.68, withRiver: 8]
     [81.116 81.331]
     [143.995 144.453, withRiver: 1]
+
   highway
     ..addGrass 4
   for bridge in bridges
