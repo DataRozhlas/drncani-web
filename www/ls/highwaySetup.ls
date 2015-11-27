@@ -36,6 +36,7 @@ ramps =
   new Ramp "Ostrovačice", 178
   new Ramp "Kývalka", 182
   new Ramp "Brno-západ", 190
+
 class Section
   ([@fromKm, @toKm], @title) ->
   setHighway: (highway) ->
