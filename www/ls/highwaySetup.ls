@@ -44,10 +44,10 @@ class Section
     @height = @bottom - @top
 
 sections =
-  new Section [41 49] "rekonstruovaný úsek"
-  new Section [66 75] "rekonstruovaný úsek"
-  new Section [104 112] "rekonstruovaný úsek"
-  new Section [153 162] "rekonstruovaný úsek"
+  new Section [41 49] "nově zrekonstruovaný úsek"
+  new Section [66 75] "nově zrekonstruovaný úsek"
+  new Section [104 112] "nově zrekonstruovaný úsek"
+  new Section [153 162] "nově zrekonstruovaný úsek"
   new Section [29 34] "nyní v rekonstrukci"
   new Section [134 141] "nyní v rekonstrukci"
   new Section [178 182] "nyní v rekonstrukci"
