@@ -61,9 +61,10 @@ ig.setupHighway = (container) ->
     ..attr \class \section
     ..append \span
       ..html (.title)
-  canvas = container.append \canvas
+  canvas = container.append \img
     ..attr \width 250
-    ..attr \height height
+    ..attr \height 12617
+    ..attr \src "https://samizdat.cz/data/drncani-web/www/media/highway.png"
   container
     ..append \div
       ..attr \class \header
@@ -71,8 +72,8 @@ ig.setupHighway = (container) ->
       ..attr \class \footer
 
 
-  ctx = canvas.node!getContext \2d
-  highway = new ig.Highway ctx, height, kilometers, heightHeader
+  # ctx = canvas.node!getContext \2d
+  highway = new ig.Highway null, height, kilometers, heightHeader
   sections.forEach (.setHighway highway)
   sectionElement
     ..style \top -> "#{it.top}px"
@@ -106,6 +107,7 @@ ig.setupHighway = (container) ->
   canvas.on \mouseover -> highway.emit \mouseover
   canvas.on \mouseout -> highway.emit \mouseout
   events = ig.Events highway
+  return highway
   toPx = highway~kmToPx
   # highway
   #   ..addGrass 0
@@ -186,4 +188,6 @@ ig.setupHighway = (container) ->
     {diffR, diffL}
 
   highway.addData outData
+  dataURL = canvas.node!toDataURL!
+  d3.select \#canvasImg .attr \src dataURL
   highway

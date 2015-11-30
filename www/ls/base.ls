@@ -38,7 +38,7 @@ overlayContainer = container.append \div
   ..on \mouseout hideOverlay
 
 downloader1 = new ig.MapDownloader
-  ..setScale highway.scale
+  # ..setScale highway.scale
 map = new ig.Map overlayContainer, downloader1
 
-ig.highwayScale = highway.scale
+# ig.highwayScale = highway.scale

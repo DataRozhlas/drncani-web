@@ -12,7 +12,7 @@ externalStyles =
 
 externalData =
   "style": "#__dirname/www/screen.css"
-  "data": "#__dirname/data/grouped.tsv"
+  # "data": "#__dirname/data/grouped.tsv"
   "km-reference": "#__dirname/data/km-reference.tsv"
 
 preferScripts = <[ utils.js postInit.js _loadData.js ../data.js init.js _loadExternal.js]>

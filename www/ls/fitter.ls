@@ -5,7 +5,7 @@ ig.fit = ->
   $hero = $ "<div class='hero'></div>"
     ..append "<video src='https://samizdat.cz/data/drncani-web/www/media/intro.mp4' autoplay loop>"
     ..append "<div class='overlay'></div>"
-    ..append "<span class='copy'>foto: ČTK</span>"
+    # ..append "<span class='copy'>foto: ČTK</span>"
     ..append "<a href='#' class='scroll-btn'>Číst dál</a>"
     ..find 'a.scroll-btn' .bind 'click touchstart' (evt) ->
       evt.preventDefault!
@@ -20,7 +20,7 @@ ig.fit = ->
   $filling = $ "<div class='ig filling'></div>"
     ..css \height $hero.height! + 50
   $ "p.perex"
-    ..html "Český rozhlas změřil intenzitu otřesů při jízdě po nejděravější české dálnici. Projeďte si ji kilometr po kilometru v interaktivní mapě a podívejte se,<br>jak to hází na nejzanedbanějších úsecích, a jak na nově opravených."
+    ..html "Český rozhlas změřil intenzitu otřesů při jízdě po nejděravější české dálnici. Projeďte si ji kilometr po kilometru v interaktivní mapě a podívejte se,<br>jak to hází na nejzanedbanějších úsecích a jak na nově opravených."
     ..after $filling
 
   $shares = $ "<div class='shares'>

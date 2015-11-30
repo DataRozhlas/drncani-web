@@ -30,7 +30,7 @@ players = for let name, index in <[ player-1 player-2 ]>
   return unless ig.containers['player-1']
   element = d3.select ig.containers[name]
   downloader2 = new ig.MapDownloader
-    ..setScale ig.highwayScale
+    # ..setScale ig.highwayScale
   mapPlayerContainer = element.append \div
     ..attr \class \map-player-container
   mapToPlayer = new ig.Map mapPlayerContainer, downloader2
